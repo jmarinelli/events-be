@@ -1,0 +1,11 @@
+# Read about fixtures at http://api.rubyonrails.org/classes/ActiveRecord/FixtureSet.html
+
+one:
+  type: 
+  distance: MyString
+  activity: one
+
+two:
+  type: 
+  distance: MyString
+  activity: two

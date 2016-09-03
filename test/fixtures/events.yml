@@ -1,0 +1,33 @@
+# Read about fixtures at http://api.rubyonrails.org/classes/ActiveRecord/FixtureSet.html
+
+one:
+  name: MyString
+  author: MyString
+  country: one
+  state: one
+  city: one
+  category: one
+  status: MyString
+  start_date: 2016-09-03
+  start_time: 2016-09-03 03:19:25
+  end_date: 2016-09-03
+  end_time: 2016-09-03 03:19:25
+  link: MyString
+  contact_email: MyString
+  contact_phone: MyString
+
+two:
+  name: MyString
+  author: MyString
+  country: two
+  state: two
+  city: two
+  category: two
+  status: MyString
+  start_date: 2016-09-03
+  start_time: 2016-09-03 03:19:25
+  end_date: 2016-09-03
+  end_time: 2016-09-03 03:19:25
+  link: MyString
+  contact_email: MyString
+  contact_phone: MyString
