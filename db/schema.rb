@@ -12,18 +12,21 @@
 
 ActiveRecord::Schema.define(version: 20160903235642) do
 
+  # These are extensions that must be enabled in order to support this database
+  enable_extension "plpgsql"
+
   create_table "activities", force: :cascade do |t|
     t.integer  "event_id"
     t.string   "link"
     t.float    "price"
     t.datetime "created_at", null: false
     t.datetime "updated_at", null: false
-    t.string   "tags"
+    t.string   "tags",                    array: true
     t.datetime "start_date"
     t.datetime "end_date"
     t.boolean  "published"
     t.boolean  "deleted"
-    t.index ["event_id"], name: "index_activities_on_event_id"
+    t.index ["event_id"], name: "index_activities_on_event_id", using: :btree
   end
 
   create_table "categories", force: :cascade do |t|
@@ -38,8 +41,8 @@ ActiveRecord::Schema.define(version: 20160903235642) do
     t.datetime "updated_at", null: false
     t.integer  "country_id"
     t.integer  "state_id"
-    t.index ["country_id"], name: "index_cities_on_country_id"
-    t.index ["state_id"], name: "index_cities_on_state_id"
+    t.index ["country_id"], name: "index_cities_on_country_id", using: :btree
+    t.index ["state_id"], name: "index_cities_on_state_id", using: :btree
   end
 
   create_table "countries", force: :cascade do |t|
@@ -54,7 +57,7 @@ ActiveRecord::Schema.define(version: 20160903235642) do
     t.integer  "activity_id"
     t.datetime "created_at",  null: false
     t.datetime "updated_at",  null: false
-    t.index ["activity_id"], name: "index_disciplines_on_activity_id"
+    t.index ["activity_id"], name: "index_disciplines_on_activity_id", using: :btree
   end
 
   create_table "events", force: :cascade do |t|
@@ -69,29 +72,29 @@ ActiveRecord::Schema.define(version: 20160903235642) do
     t.string   "contact_phone"
     t.datetime "created_at",    null: false
     t.datetime "updated_at",    null: false
-    t.string   "tags"
+    t.string   "tags",                       array: true
     t.datetime "start_date"
     t.datetime "end_date"
     t.boolean  "published"
     t.boolean  "deleted"
-    t.index ["category_id"], name: "index_events_on_category_id"
-    t.index ["city_id"], name: "index_events_on_city_id"
-    t.index ["country_id"], name: "index_events_on_country_id"
-    t.index ["state_id"], name: "index_events_on_state_id"
+    t.index ["category_id"], name: "index_events_on_category_id", using: :btree
+    t.index ["city_id"], name: "index_events_on_city_id", using: :btree
+    t.index ["country_id"], name: "index_events_on_country_id", using: :btree
+    t.index ["state_id"], name: "index_events_on_state_id", using: :btree
   end
 
   create_table "events_users_favorites", id: false, force: :cascade do |t|
     t.integer "user_id"
     t.integer "event_id"
-    t.index ["event_id"], name: "index_events_users_favorites_on_event_id"
-    t.index ["user_id"], name: "index_events_users_favorites_on_user_id"
+    t.index ["event_id"], name: "index_events_users_favorites_on_event_id", using: :btree
+    t.index ["user_id"], name: "index_events_users_favorites_on_user_id", using: :btree
   end
 
   create_table "events_users_registers", id: false, force: :cascade do |t|
     t.integer "user_id"
     t.integer "event_id"
-    t.index ["event_id"], name: "index_events_users_registers_on_event_id"
-    t.index ["user_id"], name: "index_events_users_registers_on_user_id"
+    t.index ["event_id"], name: "index_events_users_registers_on_event_id", using: :btree
+    t.index ["user_id"], name: "index_events_users_registers_on_user_id", using: :btree
   end
 
   create_table "social_network_profiles", force: :cascade do |t|
@@ -101,7 +104,7 @@ ActiveRecord::Schema.define(version: 20160903235642) do
     t.integer  "user_id"
     t.datetime "created_at",    null: false
     t.datetime "updated_at",    null: false
-    t.index ["user_id"], name: "index_social_network_profiles_on_user_id"
+    t.index ["user_id"], name: "index_social_network_profiles_on_user_id", using: :btree
   end
 
   create_table "social_providers", force: :cascade do |t|
@@ -110,7 +113,7 @@ ActiveRecord::Schema.define(version: 20160903235642) do
     t.integer  "event_id"
     t.datetime "created_at", null: false
     t.datetime "updated_at", null: false
-    t.index ["event_id"], name: "index_social_providers_on_event_id"
+    t.index ["event_id"], name: "index_social_providers_on_event_id", using: :btree
   end
 
   create_table "states", force: :cascade do |t|
@@ -118,7 +121,7 @@ ActiveRecord::Schema.define(version: 20160903235642) do
     t.datetime "created_at", null: false
     t.datetime "updated_at", null: false
     t.integer  "country_id"
-    t.index ["country_id"], name: "index_states_on_country_id"
+    t.index ["country_id"], name: "index_states_on_country_id", using: :btree
   end
 
   create_table "users", force: :cascade do |t|
@@ -134,4 +137,19 @@ ActiveRecord::Schema.define(version: 20160903235642) do
     t.boolean  "active"
   end
 
+  add_foreign_key "activities", "events"
+  add_foreign_key "cities", "countries"
+  add_foreign_key "cities", "states"
+  add_foreign_key "disciplines", "activities"
+  add_foreign_key "events", "categories"
+  add_foreign_key "events", "cities"
+  add_foreign_key "events", "countries"
+  add_foreign_key "events", "states"
+  add_foreign_key "events_users_favorites", "events"
+  add_foreign_key "events_users_favorites", "users"
+  add_foreign_key "events_users_registers", "events"
+  add_foreign_key "events_users_registers", "users"
+  add_foreign_key "social_network_profiles", "users"
+  add_foreign_key "social_providers", "events"
+  add_foreign_key "states", "countries"
 end
