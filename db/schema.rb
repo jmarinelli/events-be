@@ -10,11 +10,10 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 20160903185734) do
+ActiveRecord::Schema.define(version: 20160903235642) do
 
   create_table "activities", force: :cascade do |t|
     t.integer  "event_id"
-    t.string   "status"
     t.string   "link"
     t.float    "price"
     t.datetime "created_at", null: false
@@ -22,6 +21,8 @@ ActiveRecord::Schema.define(version: 20160903185734) do
     t.string   "tags"
     t.datetime "start_date"
     t.datetime "end_date"
+    t.boolean  "published"
+    t.boolean  "deleted"
     t.index ["event_id"], name: "index_activities_on_event_id"
   end
 
@@ -63,7 +64,6 @@ ActiveRecord::Schema.define(version: 20160903185734) do
     t.integer  "state_id"
     t.integer  "city_id"
     t.integer  "category_id"
-    t.string   "status"
     t.string   "link"
     t.string   "contact_email"
     t.string   "contact_phone"
@@ -72,6 +72,8 @@ ActiveRecord::Schema.define(version: 20160903185734) do
     t.string   "tags"
     t.datetime "start_date"
     t.datetime "end_date"
+    t.boolean  "published"
+    t.boolean  "deleted"
     t.index ["category_id"], name: "index_events_on_category_id"
     t.index ["city_id"], name: "index_events_on_city_id"
     t.index ["country_id"], name: "index_events_on_country_id"
@@ -125,11 +127,11 @@ ActiveRecord::Schema.define(version: 20160903185734) do
     t.string   "email"
     t.string   "user_name"
     t.string   "password"
-    t.string   "status"
     t.date     "birthdate"
     t.string   "picture"
     t.datetime "created_at", null: false
     t.datetime "updated_at", null: false
+    t.boolean  "active"
   end
 
 end
