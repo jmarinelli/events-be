@@ -16,6 +16,7 @@ class Event < ApplicationRecord
 	def self.filter_events(params={})
 		filtered_events = Event.all
 
+		if params[:name].present? then filtered_events = filtered_events.name_like(params[:name]) end
 		if params[:category_ids].present? then filtered_events = filtered_events.with_category_in(params[:category_ids]) end
 		if params[:country_id].present? then filtered_events = filtered_events.with_country(params[:country_id]) end
 		if params[:state_id].present? then filtered_events = filtered_events.with_state(params[:state_id]) end
@@ -33,6 +34,7 @@ class Event < ApplicationRecord
 			self.deleted ||= false
 		end
 
+	scope :name_like, -> (name){ where("LOWER(name) LIKE ?", "%#{name.downcase}%") }
 	scope :active, -> { where(published: true, deleted: false) }
 	scope :with_category_in, -> (categories){ where(category_id: categories) }
 	scope :with_country, -> (country_id){ where(country_id: country_id) }

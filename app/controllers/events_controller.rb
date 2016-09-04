@@ -45,7 +45,8 @@ class EventsController < ApplicationController
     end
 
     def events_query
-      params.permit(:distance, :country_id, :state_id, :city_id, :first_date, :last_date, :category_ids => [])
+      params.permit(:distance, :country_id, :state_id, :city_id, :first_date, :last_date, 
+                    { :category_ids => [] }, :name)
     end
 
     # Only allow a trusted parameter "white list" through.
@@ -54,6 +55,6 @@ class EventsController < ApplicationController
                                     :category_id, :published, :deleted, :link, :contact_email, 
                                     :contact_phone, :start_date, :end_date, tags: [],
                                     activities_attributes: [:id, :link, :start_date, :end_date, 
-                                                            :price, tags: []])
+                                                            :price, :published, tags: []])
     end
 end

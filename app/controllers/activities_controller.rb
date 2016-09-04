@@ -1,9 +1,10 @@
 class ActivitiesController < ApplicationController
   before_action :set_activity, only: [:show, :update, :destroy]
+  before_action :set_event, only: [:index, :create]
 
   # GET /activities
   def index
-    @activities = Activity.all
+    @activities = @event.activities
 
     render json: @activities
   end
@@ -16,9 +17,10 @@ class ActivitiesController < ApplicationController
   # POST /activities
   def create
     @activity = Activity.new(activity_params)
+    @event.activities << @activity
 
-    if @activity.save
-      render json: @activity, status: :created, location: @activity
+    if @event.save
+      render json: @activity, status: :created
     else
       render json: @activity.errors, status: :unprocessable_entity
     end
@@ -42,6 +44,10 @@ class ActivitiesController < ApplicationController
     # Use callbacks to share common setup or constraints between actions.
     def set_activity
       @activity = Activity.find(params[:id])
+    end
+
+    def set_event
+      @event = Event.find(params[:event_id])
     end
 
     # Only allow a trusted parameter "white list" through.

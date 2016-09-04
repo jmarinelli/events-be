@@ -1,5 +1,6 @@
 class UsersController < ApplicationController
-  before_action :set_user, only: [:show, :update, :destroy]
+  before_action :set_user, only: [:show, :update, :destroy, :favorited_event, :registered_events]
+  before_action :set_event, only: [:favorited_event, :registered_events]
 
   # GET /users
   def index
@@ -10,7 +11,7 @@ class UsersController < ApplicationController
 
   # GET /users/1
   def show
-    render json: @user
+    render json: @user, serializer: UserDetailSerializer
   end
 
   # POST /users
@@ -26,7 +27,7 @@ class UsersController < ApplicationController
 
   # PATCH/PUT /users/1
   def update
-    if @user.update(user_params)
+    if @user.update(edit_user_params)
       render json: @user
     else
       render json: @user.errors, status: :unprocessable_entity
@@ -38,10 +39,41 @@ class UsersController < ApplicationController
     @user.destroy
   end
 
+  # POST /users/1/favorited_events
+  def favorited_event
+    @user.favorited_events << @event
+
+    if @user.errors.empty?
+      render json: @user
+    else
+      render json: @user.errors, status: :unprocessable_entity
+    end
+  end
+
+  # POST /users/1/registered_events
+  def registered_events
+    @user.registered_events << @event
+
+    if @user.errors.empty?
+      render json: @user
+    else
+      render json: @user.errors, status: :unprocessable_entity
+    end
+  end
+
   private
     # Use callbacks to share common setup or constraints between actions.
     def set_user
       @user = User.find(params[:id])
+    end
+
+    def set_event
+      @event = Event.find(params[:event_id])
+    end
+
+    def edit_user_params
+      params.require(:user).permit(:first_name, :last_name, :email, :password, 
+                                  :birthdate, :picture)
     end
 
     # Only allow a trusted parameter "white list" through.
